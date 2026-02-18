@@ -1,3 +1,7 @@
+from Collector import ResourceCollector
+from TagEnforce import TagEnforcer
+
+
 if __name__ == "__main__":
     # 1. Collect the data
     collector = ResourceCollector(region_name="us-east-1")
@@ -16,3 +20,4 @@ if __name__ == "__main__":
     
     for v in flagged_resources:
         print(f" Instance {v['InstanceId']} is missing: {v['MissingTags']}")
+    
