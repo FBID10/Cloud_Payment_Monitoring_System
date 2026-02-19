@@ -1,6 +1,22 @@
+import csv
+
 from Collector import ResourceCollector
 from TagEnforce import TagEnforcer
 from StateManager import StateManager
+
+
+def write_violators_to_csv(violators, file_path="violators.csv"):
+    with open(file_path, "w", newline="", encoding="utf-8") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=["InstanceId", "MissingTags", "LaunchTime"])
+        writer.writeheader()
+        for violator in violators:
+            writer.writerow(
+                {
+                    "InstanceId": violator.get("InstanceId", ""),
+                    "MissingTags": ",".join(violator.get("MissingTags", [])),
+                    "LaunchTime": violator.get("LaunchTime", ""),
+                }
+            )
 
 
 if __name__ == "__main__":
@@ -14,6 +30,7 @@ if __name__ == "__main__":
 
     # 3. Find the violators
     flagged_resources = enforcer.find_violators(all_instances)
+    write_violators_to_csv(flagged_resources)
 
     # 4. Initialize State Manager to track flagged instances
     state_manager = StateManager()
