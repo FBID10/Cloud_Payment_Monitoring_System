@@ -5,6 +5,15 @@ import Collector
 
 
 class TestResourceCollector(unittest.TestCase):
+    def test_ec2_client_uses_configured_region(self):
+        session = Mock()
+
+        with patch.object(Collector.boto3, "Session", return_value=session):
+            collector = Collector.ResourceCollector(region_name="ap-south-1")
+            collector._ec2_client()
+
+        session.client.assert_called_once_with("ec2", region_name="ap-south-1")
+
     def test_init_without_profile_name_uses_default_session(self):
         session = Mock()
 
