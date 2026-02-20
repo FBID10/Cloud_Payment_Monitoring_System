@@ -5,6 +5,15 @@ import Collector
 
 
 class TestResourceCollector(unittest.TestCase):
+    def test_init_without_profile_name_uses_default_session(self):
+        session = Mock()
+
+        with patch.object(Collector.boto3, "Session", return_value=session) as mocked_session:
+            collector = Collector.ResourceCollector(region_name="eu-west-1")
+
+        mocked_session.assert_called_once_with()
+        self.assertEqual(collector._region_name, "eu-west-1")
+
     def test_init_uses_profile_name_when_provided(self):
         session = Mock()
 
