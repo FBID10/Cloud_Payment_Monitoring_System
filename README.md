@@ -146,6 +146,106 @@ python -m pytest test_collector.py
 python -m pytest test_state_manager.py
 ```
 
+## Advanced Configuration
+
+### Filtering by Instance State
+
+The system automatically discovers all instances regardless of state (running, stopped, terminated). To filter specific states, modify the `Collector.py`:
+
+```python
+# Add state filtering in get_all_instances()
+if instance['State']['Name'] == 'running':
+    instances.append(instance)
+```
+
+### Custom Tag Rules
+
+Define your own tagging standards in `main.py`:
+
+```python
+# Compliance rules for your organization
+my_rules = [
+    "Owner",        # Who owns this resource
+    "CostCenter",   # Billing cost center
+    "Project",      # Project identifier
+    "Environment",  # Dev/Test/Prod
+    "CreatedBy",    # Who created it
+    "CreatedDate"   # When it was created
+]
+```
+
+### Multi-Region Scanning
+
+Extend the system to scan multiple regions:
+
+```python
+regions = ["us-east-1", "us-west-2", "eu-west-1"]
+
+for region in regions:
+    collector = ResourceCollector(region_name=region)
+    all_instances = collector.get_all_instances()
+    # Process instances...
+```
+
+### Database Maintenance
+
+Clean up old violation records:
+
+```python
+# In StateManager
+def cleanup_old_records(self, days=30):
+    """Remove inactive records older than specified days"""
+    pass
+```
+
+## Troubleshooting
+
+### AWS Credential Issues
+
+If you encounter `BotoCoreError: Unable to locate credentials`:
+
+1. Configure AWS credentials:
+```bash
+aws configure
+```
+
+2. Or set environment variables:
+```bash
+export AWS_ACCESS_KEY_ID=your_key
+export AWS_SECRET_ACCESS_KEY=your_secret
+export AWS_DEFAULT_REGION=us-east-1
+```
+
+### Permission Denied Errors
+
+Ensure your AWS IAM user has these permissions:
+- `ec2:DescribeInstances`
+- `ec2:DescribeTags`
+
+### Database Lock Issues
+
+If you encounter "database is locked" errors:
+1. Ensure no other processes are accessing `instance_state.db`
+2. Restart the application or clear the database:
+```bash
+rm instance_state.db
+```
+
+## Performance Considerations
+
+- **Large deployments**: For 1000+ instances, expect 2-5 minutes runtime
+- **Pagination**: The system automatically handles paginated API responses
+- **Database**: SQLite is suitable for up to ~10k instance records
+
+## Future Enhancements
+
+- [ ] Automatic tag remediation
+- [ ] Email/Slack notifications for new violations
+- [ ] Dashboard for violation trends
+- [ ] CloudTrail integration for audit trails
+- [ ] Automatic tag suggestions based on usage patterns
+- [ ] Multi-account AWS Organization support
+
 ## License
 
 This project is licensed under the terms specified in the LICENSE file.
