@@ -263,6 +263,55 @@ rm instance_state.db
 - [ ] Automatic tag suggestions based on usage patterns
 - [ ] Multi-account AWS Organization support
 
+## Getting Help and Environment Setup
+
+### Local Development Setup
+
+Set up a virtual environment for development:
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install boto3 pytest
+```
+
+### Quick Start Guide
+
+1. Clone and setup:
+   ```bash
+   git clone https://github.com/FBID10/Cloud_Payment_Monitoring_System.git
+   cd Cloud_Payment_Monitoring_System
+   ```
+
+2. Install and configure:
+   ```bash
+   pip install boto3
+   aws configure
+   ```
+
+3. Run the monitoring:
+   ```bash
+   python main.py
+   ```
+
+4. Review results in `violators.csv`
+
+### FAQ
+
+**Q: How often should I run the monitoring script?**
+A: Daily scans are recommended for most environments, or more frequently for high-security deployments.
+
+**Q: Can I exclude specific instances?**
+A: Yes, modify the filtering logic in `Collector.py` to skip instances based on tags or IDs.
+
+**Q: What if I need to monitor multiple AWS accounts?**
+A: Run the script separately with different AWS profiles or use cross-account role assumption.
+
 ## License
 
 This project is licensed under the terms specified in the LICENSE file.
