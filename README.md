@@ -237,6 +237,14 @@ rm instance_state.db
 - **Pagination**: The system automatically handles paginated API responses
 - **Database**: SQLite is suitable for up to ~10k instance records
 
+## Best Practices
+
+- **Regular Scans**: Schedule the monitoring script to run daily using cron or AWS Lambda
+- **Tag Standardization**: Establish clear tagging standards across your organization
+- **Documentation**: Keep your tagging policy documented and version controlled
+- **Review Violations**: Regularly review violation reports and remediate as needed
+- **Backup State**: Periodically backup the `instance_state.db` for historical tracking
+
 ## Future Enhancements
 
 - [ ] Automatic tag remediation
