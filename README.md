@@ -237,6 +237,15 @@ rm instance_state.db
 - **Pagination**: The system automatically handles paginated API responses
 - **Database**: SQLite is suitable for up to ~10k instance records
 
+## Security Considerations
+
+- **Credentials Management**: Never hardcode AWS credentials in your code
+- **IAM Policies**: Use principle of least privilege - grant only necessary EC2 read permissions
+- **Database Security**: Protect `instance_state.db` file with appropriate file permissions
+- **CSV Reports**: Ensure generated CSV files are treated as sensitive data containing resource information
+- **Audit Logging**: Enable CloudTrail to audit all EC2 API calls made by this tool
+- **Environment Variables**: Use AWS profiles or environment variables for credential management
+
 ## Best Practices
 
 - **Regular Scans**: Schedule the monitoring script to run daily using cron or AWS Lambda
